@@ -1,0 +1,218 @@
+<!-- This file needs to be hosted on an external server.  -->
+<html>
+    <head>
+        <title>Annotorious Example Page</title>
+        <!-- <link rel="stylesheet" href="highlight.js/zenburn.css">-->
+        <link rel="stylesheet" href="annotorious.css" />
+        <link rel="stylesheet" href="pure.css" />
+        <!-- <script src="highlight.js/highlight.pack.js"></script>-->
+        <script src="annotorious.min.js"></script>
+        <!-- <script>hljs.initHighlightingOnLoad();</script> -->
+        <script language="Javascript">
+                
+            //
+            // This method Gets URL Parameters (GUP)
+            //
+            function gup( name )
+            {
+                var regexS = "[\\?&]"+name+"=([^&#]*)";
+                var regex = new RegExp( regexS );
+                var tmpURL = window.location.href;
+                var results = regex.exec( tmpURL );
+                if( results == null )
+                return "";
+                else
+                return results[1];
+            }
+            
+            //
+            // This method decodes the query parameters that were URL-encoded
+            //
+            function decode(strToDecode)
+            {
+                var encoded = strToDecode;
+                return unescape(encoded.replace(/\+/g,  " "));
+            }
+            function beforeSubmit()
+            {
+                var a = anno.getAnnotations();
+                var string = JSON.stringify(a);
+                document.getElementById("output").value = string;
+                return 1;
+            }
+            </script>
+            <style>
+                html, body {
+                    background-color:#dfdfdf;
+                    min-height:100%;
+                    padding:0;
+                    margin:0;
+                    font-family:"helvetica neue","helvetica","arial","sans-serif";
+                    font-size:14px;
+                    line-height:22px;
+                }
+            
+            .column {
+                width:60%;
+                min-width:800px;
+                margin:0 auto;
+                padding:10px 40px 10px 40px;
+                background-color:#eaeaea;
+                min-height:100%;
+                border-width:0px 1px;
+                border-style:solid;
+                border-color:#dadada;
+            }
+            
+            .radioclass {
+                margin: 10px 10px;
+            }
+            
+            label {
+                width: 150px;
+                border-radius: 3px;
+                border: 1px solid #D1D3D4
+            }
+            
+            /* hide input */
+            input.radio:empty {
+                margin-left: -9999px;
+            }
+            
+            /* style label */
+            input.radio:empty ~ label {
+                position: relative;
+                float: left;
+                line-height: 2.5em;
+                text-indent: 3.25em;
+                margin-top: 2em;
+                cursor: pointer;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+            
+            input.radio:empty ~ label:before {
+                position: absolute;
+                display: block;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                content: '';
+                width: 2.5em;
+                background: #D1D3D4;
+                border-radius: 3px 0 0 3px;
+            }
+            
+            /* toggle hover */
+            input.radio:hover:not(:checked) ~ label:before {
+                content:'\2714';
+                text-indent: .9em;
+                color: #C2C2C2;
+            }
+            
+            input.radio:hover:not(:checked) ~ label {
+                color: #888;
+            }
+            
+            /* toggle on */
+            input.radio:checked ~ label:before {
+                content:'\2714';
+                text-indent: .9em;
+                color: #9CE2AE;
+                background-color: #4DCB6D;
+            }
+            
+            input.radio:checked ~ label {
+                color: #777;
+            }
+            
+            /* radio focus */
+            input.radio:focus ~ label:before {
+                box-shadow: 0 0 0 3px #999;
+            }
+            
+            </style>    
+            </head>
+
+<body>
+<form id="mturk_form" method="POST" action="https://www.mturk.com/mturk/externalSubmit" onsubmit="return beforeSubmit()">
+    <input type="hidden" id="assignmentId" name="assignmentId" value="">
+        <input type="hidden" id="output" name="output" value="">
+    <div class="column">
+
+    <h1 id="title"></h1>
+    <p id="question"></p>
+    
+    <table><tr><td>
+    <div style="margin:3px 0px 3px 0px;">
+        <img id="image" src="640px-Hallstatt.jpg" class="annotatable">
+    </div>
+    </td>
+    <td>
+        <div style="padding:10px 10px 10px 10px;"> <input style="width:100%;" class="pure-button" id="submit" type="submit" name="submit" value="Submit"></div>
+        <div id="d1" class="radioclass"><input class="radio" type="radio" id="r1" name="category" value="c1"><label for="r1" id="c1"></label></div>
+        <div id="d2" class="radioclass"><input class="radio" type="radio" id="r2" name="category" value="c2"><label for="r2" id="c2"></label></div>
+        <div id="d3" class="radioclass"><input class="radio" type="radio" id="r3" name="category" value="c3"><label for="r3" id="c3"></label></div>
+    </td></tr>
+    </table>
+    </div>
+</form>
+
+
+<script language="Javascript">
+    var image = decode(gup('image'));
+    var title = decode(gup('title'));
+    var question = decode(gup('question'));
+    var c1s = decode(gup('c1'));
+    var c2s = decode(gup('c2'));
+    var c3s = decode(gup('c3'));
+    var ant = decode(gup('ant'));
+    
+    document.getElementById('image').src = image + '.jpg';
+    document.getElementById('title').innerHTML = title;
+    document.getElementById('question').innerHTML = question;
+    if (c1s == "") {
+        document.getElementById('d1').innerHTML = "";
+    }
+    else {
+        document.getElementById('c1').innerHTML = '&nbsp;' + c1s;
+    }
+    if (c2s == "") {
+        document.getElementById('d2').innerHTML = "";
+    }
+    else {
+        document.getElementById('c2').innerHTML = '&nbsp;' + c2s;
+    }
+    if (c3s == "") {
+        document.getElementById('d3').innerHTML = "";
+    }
+    else {
+        document.getElementById('c3').innerHTML = '&nbsp;' + c3s;
+    }
+    if (ant == "") {
+        document.getElementById('image').removeAttribute('class');
+    }
+    document.getElementById('assignmentId').value = gup('assignmentId');
+
+
+    //
+    // Check if the worker is PREVIEWING the HIT or if they've ACCEPTED the HIT
+    //
+    if (gup('assignmentId') == "ASSIGNMENT_ID_NOT_AVAILABLE")
+    {
+        // If we're previewing, disable the button and give it a helpful message
+        document.getElementById('submit').disabled = true;
+        document.getElementById('submit').value = "ACCEPT HIT FIRST!";
+    }
+    else {
+        var form = document.getElementById('mturk_form');
+        if (document.referrer && ( document.referrer.indexOf('workersandbox') != -1) ) {
+            form.action = "https://workersandbox.mturk.com/mturk/externalSubmit";
+        }
+    }
+
+</script>
+</body>
+</html>
